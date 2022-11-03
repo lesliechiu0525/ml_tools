@@ -1,4 +1,6 @@
 import itertools
+
+import numpy as np
 import xgboost as xgb
 class confidence_auc_search():
     def __init__(self,feature,label):
@@ -27,7 +29,8 @@ class confidence_auc_search():
             score_ini=[]
             boost_ini=[]
             for j in range(5):
-                res=xgb.cv(param,DTrain,metrics=["auc"],num_boost_round=num_boost_round,nfold=10,shuffle=True)
+                res=xgb.cv(param,DTrain,metrics=["auc"],num_boost_round=num_boost_round,nfold=10\
+                           ,shuffle=True,seed=np.random.choice(np.arange(1,1000,1)))
                 score_ini.append(res["test-auc-mean"].max())
                 boost_ini.append(res["test-auc-mean"].argmax())
             #记录这一组参数结果
